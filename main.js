@@ -4,6 +4,7 @@ var run = true; // ゲームの処理を継続するかどうかのフラグ
 var fps = 1000/30; // ゲームの更新頻度を表す FPS
 var mouse = new Point();
 var ctx; // canvas2dコンテキスト格納用
+var CHARA_COLOR = 'rgba(0, 0, 255, 0.75)';
 
 // ---main---
 window.onload = function(){
@@ -23,7 +24,11 @@ window.onload = function(){
     // その他のエレメント関連
     info = document.getElementById("info");
 
-    // ループ処理を呼び出す
+    // 自機初期化
+    var chara = new Character();
+    chara.init(10);
+
+    // レンダリング処理を呼び出す
     (function(){
         // HTMLを更新
         info.innerHTML = mouse.x + ':' + mouse.y;
@@ -34,11 +39,15 @@ window.onload = function(){
         // パスの設定を開始
         ctx.beginPath();
 
-        // 円の色を設定する
-        ctx.fillStyle = 'rgba(0, 0, 255, 0.75)';
+        // 自機の位置を設定
+        chara.position.x = mouse.x;
+        chara.position.y = mouse.y;
 
-        // 円を描くパスを設定
-        ctx.arc(mouse.x, mouse.y, 10, 0, Math.PI * 2, false);
+        // 自機を描くパスを設定
+        ctx.arc(chara.position.x, chara.position.y, chara.size, 0, Math.PI * 2, false);
+
+        // 自機の色を設定する
+        ctx.fillStyle = CHARA_COLOR;
 
         // 円を描く
         ctx.fill();
@@ -48,7 +57,7 @@ window.onload = function(){
             setTimeout(arguments.callee, fps);
         }
     })();
-}
+};
 
 // ---event---
 function mouseMove(event){
